@@ -20,15 +20,21 @@ app.get('/test', (req,res) => {
   res.json('test ok');
 });
 
-app.post('/register', async(req,res) =>{
+app.post('/register', async(req,res) => {
   const {name,email,password} = req.body;
-  const userInfo = await User.create({
-    name,
-    email,
-    password: bcrypt.hashSync(password, bcryptSalt),
-  });
 
-  res.json(userInfo);
+  try {
+    const userInfo = await User.create({
+      name,
+      email,
+      password: bcrypt.hashSync(password, bcryptSalt),
+    });
+
+    res.json(userInfo);
+  } catch (e) {
+    res.status(422).json(e);
+  }
+
 });
 
 
